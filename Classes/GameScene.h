@@ -19,6 +19,9 @@ private:
 	cocos2d::Vec2 pos;
 	static std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> keys;
 	
+	cocos2d::PhysicsWorld *gameWorld;
+	void SetPhysicsWorld(cocos2d::PhysicsWorld *world) { gameWorld = world; };
+	
 public: 
 	
 };
