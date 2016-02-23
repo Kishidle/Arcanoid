@@ -20,6 +20,7 @@ Scene* GameScene::createScene() {
 bool GameScene::init() {
 	//code here LOL
 
+	int i = 0;
 	paddle = Sprite::create("paddle.png");
 	paddle->setPosition(200, 200);
 	paddle->setAnchorPoint(Vec2(0, 0));
@@ -29,8 +30,8 @@ bool GameScene::init() {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleSize();
 
+	//create physics
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
-
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(Point(visibleSize.width / 2 * origin.x, visibleSize.height / 2 * origin.y));
 
@@ -38,8 +39,12 @@ bool GameScene::init() {
 
 	this->addChild(edgeNode);
 
+	for (i = 0; i < 10; i++) {
+		auto block = Sprite::create("blockpnghere.png");
+	}
+
+	//creating keyboard listener
 	auto kbListener = EventListenerKeyboard::create();
-	
 	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
 	kbListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
 		if (keys.find(keyCode) == keys.end()) {
