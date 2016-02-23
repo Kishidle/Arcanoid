@@ -16,7 +16,10 @@ public:
 private:
 	char curDir;
 	cocos2d::Sprite* paddle;
+	cocos2d::Sprite* ball;
+	cocos2d::Sprite* block;
 	cocos2d::Vec2 pos;
+	
 	static std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> keys;
 	
 	cocos2d::PhysicsWorld *gameWorld;

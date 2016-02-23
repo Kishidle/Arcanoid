@@ -21,27 +21,47 @@ bool GameScene::init() {
 	//code here LOL
 
 	int i = 0;
+	int n = 0;
+	int blockX = 50;
+	int blockY = 600;
+	curDir = 'x';
 	paddle = Sprite::create("paddle.png");
-	paddle->setPosition(200, 200);
+	paddle->setPosition(200, 100);
 	paddle->setAnchorPoint(Vec2(0, 0));
 	this->addChild(paddle);
-	curDir = 'x';
+	
+	ball = Sprite::create("ball.png");
+	ball->setPosition(200, 400);
+	paddle->setAnchorPoint(Vec2(0, 0));
+	this->addChild(ball);
+
 	
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	//create physics
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
 	auto edgeNode = Node::create();
-	edgeNode->setPosition(Point(visibleSize.width / 2 * origin.x, visibleSize.height / 2 * origin.y));
-
+	edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height /2 + origin.y));
+	edgeNode->setAnchorPoint(Vec2(0, 0));
 	edgeNode->setPhysicsBody(edgeBody);
 
 	this->addChild(edgeNode);
 
-	for (i = 0; i < 10; i++) {
-		auto block = Sprite::create("blockpnghere.png");
+	for (n = 0; n < 5; n++) {
+		for (i = 0; i < 10; i++) {
+			block = Sprite::create("normal_block.png");
+			block->setPosition(blockX, blockY);
+			block->setAnchorPoint(Vec2(0, 0));
+			this->addChild(block);
+
+			blockX += 39;
+		}
+		blockY -= 30;
+		blockX = 50;
 	}
+	
+	
 
 	//creating keyboard listener
 	auto kbListener = EventListenerKeyboard::create();
