@@ -6,7 +6,7 @@ USING_NS_CC;
 Scene* GameScene::createScene() {
 	auto scene = Scene::createWithPhysics();
 
-	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
 	auto layer = GameScene::create();
 
@@ -31,7 +31,7 @@ bool GameScene::init() {
 	this->addChild(paddle);
 	
 	ball = Sprite::create("ball test.png");
-	ball->setPosition(200, 400);
+	ball->setPosition(230, 123);
 	auto ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2, PhysicsMaterial(0, 1, 0));
 	ball->setPhysicsBody(ballBody);
 	paddle->setAnchorPoint(Vec2(0, 0));
@@ -56,8 +56,6 @@ bool GameScene::init() {
 			block->setPosition(blockX, blockY);
 			auto blockBody = PhysicsBody::createBox(block->getContentSize(), PhysicsMaterial(0, 1, 0));
 			block->setPhysicsBody(blockBody);
-			//auto blockBody = PhysicsBody::createCircle(block->getContentSize().width / 2, PhysicsMaterial(0, 1, 0));
-			//block->setPhysicsBody(blockBody);
 			block->setAnchorPoint(Vec2(0, 0));
 			this->addChild(block);
 
@@ -96,7 +94,7 @@ bool GameScene::isKeyPressed(EventKeyboard::KeyCode keyCode) {
 }
 
 void GameScene::playerMovement(EventKeyboard::KeyCode keyCode) {
-	pos = paddle->getPosition();
+	paddlePos = paddle->getPosition();
 	if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
 		curDir = 'a';
 			
@@ -109,7 +107,8 @@ void GameScene::playerMovement(EventKeyboard::KeyCode keyCode) {
 }
 
 void GameScene::update(float delta) {
-	pos = paddle->getPosition();
+	paddlePos = paddle->getPosition();
+	ballPos = ball->getPosition();
 	Node::update(delta);
 	if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
 		curDir = 'a';
@@ -120,12 +119,20 @@ void GameScene::update(float delta) {
 	else curDir = 'n';
 
 	if (curDir == 'a') {
-		pos.x = pos.x - 150 * delta;
+		paddlePos.x = paddlePos.x - 150 * delta;
+		ballPos.x = ballPos.x - 150 * delta;
 	}
 	if (curDir == 'd') {
-		pos.x = pos.x + 150 * delta;
+		paddlePos.x = paddlePos.x + 150 * delta;
+		ballPos.x = ballPos.x + 150 * delta;
+		
 	}
-	paddle->setPosition(pos);
+	paddle->setPosition(paddlePos);
+	
+
+	ballPos.y = 123;
+	ball->setPosition(ballPos);
+	
 }
 std::map<cocos2d::EventKeyboard::KeyCode,
 	std::chrono::high_resolution_clock::time_point> GameScene::keys;

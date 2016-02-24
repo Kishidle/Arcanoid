@@ -18,7 +18,8 @@ private:
 	cocos2d::Sprite* paddle;
 	cocos2d::Sprite* ball;
 	cocos2d::Sprite* block;
-	cocos2d::Vec2 pos;
+	cocos2d::Vec2 paddlePos;
+	cocos2d::Vec2 ballPos;
 	
 	static std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> keys;
 	
