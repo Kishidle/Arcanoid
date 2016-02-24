@@ -7,7 +7,7 @@ Scene* GameScene::createScene() {
 	auto scene = Scene::createWithPhysics();
 
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-
+	scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
 	auto layer = GameScene::create();
 
 	layer->SetPhysicsWorld(scene->getPhysicsWorld());
@@ -22,7 +22,7 @@ bool GameScene::init() {
 
 	int i = 0;
 	int n = 0;
-	int blockX = 50;
+	int blockX = 10;
 	int blockY = 600;
 	curDir = 'x';
 	paddle = Sprite::create("paddle.png");
@@ -30,8 +30,10 @@ bool GameScene::init() {
 	paddle->setAnchorPoint(Vec2(0, 0));
 	this->addChild(paddle);
 	
-	ball = Sprite::create("ball.png");
+	ball = Sprite::create("ball test.png");
 	ball->setPosition(200, 400);
+	auto ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2, PhysicsMaterial(0, 1, 0));
+	ball->setPhysicsBody(ballBody);
 	paddle->setAnchorPoint(Vec2(0, 0));
 	this->addChild(ball);
 
@@ -49,16 +51,20 @@ bool GameScene::init() {
 	this->addChild(edgeNode);
 
 	for (n = 0; n < 5; n++) {
-		for (i = 0; i < 10; i++) {
+		for (i = 0; i < 12; i++) {
 			block = Sprite::create("normal_block.png");
 			block->setPosition(blockX, blockY);
+			auto blockBody = PhysicsBody::createBox(block->getContentSize(), PhysicsMaterial(0, 1, 0));
+			block->setPhysicsBody(blockBody);
+			//auto blockBody = PhysicsBody::createCircle(block->getContentSize().width / 2, PhysicsMaterial(0, 1, 0));
+			//block->setPhysicsBody(blockBody);
 			block->setAnchorPoint(Vec2(0, 0));
 			this->addChild(block);
 
 			blockX += 39;
 		}
 		blockY -= 30;
-		blockX = 50;
+		blockX = 10;
 	}
 	
 	
