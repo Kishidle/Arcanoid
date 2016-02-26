@@ -26,9 +26,17 @@ bool GameScene::init() {
 	int tag = 0;
 	int blockX = 10;
 	int blockY = 600;
+	lives = 3;
 	curDir = 'x';
 	gameStart = false;
 
+	livesLabel = Label::createWithSystemFont("Lives: " + std::to_string(lives), "Arial", 18);
+	
+	livesLabel->setPosition(0, 0);
+	livesLabel->setAnchorPoint(Vec2(0, 0));
+	this->addChild(livesLabel);
+
+	//livesLabel2 = Label::createWithSystemFont(std::to_string(lives), "Arial", 18);
 	paddle = Sprite::create("paddle.png");
 	paddle->setPosition(200, 100);
 	paddle->setAnchorPoint(Vec2(0, 0));
@@ -117,6 +125,11 @@ bool GameScene::init() {
 
 
 }
+void GameScene::resetState() {
+	gameStart = false;
+	paddle->setPosition(200, 100);
+	ball->setPosition(230, 123);
+}
 bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 
 	PhysicsBody *a = contact.getShapeA()->getBody();
@@ -138,6 +151,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 	
 	return true;
 }
+
 
 bool GameScene::isKeyPressed(EventKeyboard::KeyCode keyCode) {
 	if (keys.find(keyCode) != keys.end())
@@ -188,8 +202,16 @@ void GameScene::update(float delta) {
 		ball->setPosition(ballPos);
 	}
 	if (ballPos.y < this->getBoundingBox().getMinY()) {
-		Scene* restartScene = GameScene::createScene();
-		Director::getInstance()->replaceScene(restartScene);
+		lives--;
+		if (lives > 0) {
+			resetState();
+			ballBody->setVelocity(Vect(0, 0));
+			livesLabel->setString("Lives: " + std::to_string(lives));
+		}
+		else {
+			Scene* restartScene = GameScene::createScene();
+			Director::getInstance()->replaceScene(restartScene);
+		}
 	}
 	
 }
