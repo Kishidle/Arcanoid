@@ -8,6 +8,7 @@ Scene* GameScene::createScene() {
 
 	//scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
+	
 	auto layer = GameScene::create();
 
 	layer->SetPhysicsWorld(scene->getPhysicsWorld());
@@ -41,10 +42,10 @@ bool GameScene::init() {
 	
 	ball = Sprite::create("ball test.png");
 	ball->setPosition(230, 123);
-	ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2, PhysicsMaterial(0, 5, 0));
+	ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2, PhysicsMaterial(0, 1, 0));
 	ballBody->setCollisionBitmask(2);
 	ballBody->setContactTestBitmask(true);
-	ballBody->setVelocityLimit(200);
+	ballBody->setVelocityLimit(400);
 	ball->setPhysicsBody(ballBody);
 	paddle->setAnchorPoint(Vec2(0, 0));
 	this->addChild(ball);
@@ -69,7 +70,7 @@ bool GameScene::init() {
 		for (i = 0; i < 12; i++) {
 			block = Sprite::create("normal_block.png");
 			block->setPosition(blockX, blockY);
-			blockBody = PhysicsBody::createBox(block->getContentSize(), PhysicsMaterial(0, 1, 0));
+			blockBody = PhysicsBody::createCircle(block->getContentSize().width / 2, PhysicsMaterial(0, 1, 0));
 			blockBody->setCollisionBitmask(3);
 			blockBody->setContactTestBitmask(true);
 			blockBody->setTag(tag);
@@ -96,10 +97,11 @@ bool GameScene::init() {
 		if (keys.find(keyCode) == keys.end()) {
 			keys[keyCode] == std::chrono::high_resolution_clock::now();
 		}
-		
-		if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
-			ballBody->applyImpulse(Vect(100, 400));
-			gameStart = true;
+		if (gameStart == false) {
+			if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+				ballBody->applyImpulse(Vect(100, 400));
+				gameStart = true;
+			}
 		}
 		return true;
 	};
@@ -126,10 +128,11 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 	}
 	if (a->getCollisionBitmask() == 2 && b->getCollisionBitmask() == 3) {
 		removeChildByTag(b->getTag(), true);
-		
+		//ballBody->applyImpulse(Vect(100, -600));
 	}
 	if (a->getCollisionBitmask() == 3 && b->getCollisionBitmask() == 2) {
 		removeChildByTag(a->getTag(), true);
+		//ballBody->applyImpulse(Vect(100, -600));
 	}
 	
 	
