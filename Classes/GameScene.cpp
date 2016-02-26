@@ -38,6 +38,7 @@ bool GameScene::init() {
 	paddle->setPhysicsBody(paddleBody);
 	this->addChild(paddle);
 	
+	
 	ball = Sprite::create("ball test.png");
 	ball->setPosition(230, 123);
 	ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2, PhysicsMaterial(0, 5, 0));
@@ -58,6 +59,8 @@ bool GameScene::init() {
 	edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height /2 + origin.y));
 	edgeNode->setAnchorPoint(Vec2(0, 0));
 	edgeBody->setDynamic(false);
+	edgeBody->setCollisionBitmask(4);
+	edgeBody->setContactTestBitmask(true);
 	edgeNode->setPhysicsBody(edgeBody);
 
 	this->addChild(edgeNode);
@@ -116,7 +119,11 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 
 	PhysicsBody *a = contact.getShapeA()->getBody();
 	PhysicsBody *b = contact.getShapeB()->getBody();
+	Vec2 ballPos = ball->getPosition();
 
+	if (ball->getPositionY() < paddle->getPositionY()) {
+		return false;
+	}
 	if (a->getCollisionBitmask() == 2 && b->getCollisionBitmask() == 3) {
 		removeChildByTag(b->getTag(), true);
 		
@@ -124,6 +131,8 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 	if (a->getCollisionBitmask() == 3 && b->getCollisionBitmask() == 2) {
 		removeChildByTag(a->getTag(), true);
 	}
+	
+	
 	return true;
 }
 
@@ -174,6 +183,10 @@ void GameScene::update(float delta) {
 	if (!gameStart) {
 		ballPos.y = 123;
 		ball->setPosition(ballPos);
+	}
+	if (ballPos.y < this->getBoundingBox().getMinY()) {
+		Scene* restartScene = GameScene::createScene();
+		Director::getInstance()->replaceScene(restartScene);
 	}
 	
 }
