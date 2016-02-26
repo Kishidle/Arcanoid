@@ -27,16 +27,20 @@ bool GameScene::init() {
 	int blockX = 10;
 	int blockY = 600;
 	lives = 3;
+	numBlocks = 60;
 	curDir = 'x';
 	gameStart = false;
 
 	livesLabel = Label::createWithSystemFont("Lives: " + std::to_string(lives), "Arial", 18);
-	
 	livesLabel->setPosition(0, 0);
 	livesLabel->setAnchorPoint(Vec2(0, 0));
 	this->addChild(livesLabel);
 
-	//livesLabel2 = Label::createWithSystemFont(std::to_string(lives), "Arial", 18);
+	scoreLabel = Label::createWithSystemFont("# of blocks remaining: " + std::to_string(numBlocks), "Arial", 18);
+	scoreLabel->setPosition(0, 18);
+	scoreLabel->setAnchorPoint(Vec2(0, 0));
+	this->addChild(scoreLabel);
+
 	paddle = Sprite::create("paddle.png");
 	paddle->setPosition(200, 100);
 	paddle->setAnchorPoint(Vec2(0, 0));
@@ -130,6 +134,12 @@ void GameScene::resetState() {
 	paddle->setPosition(200, 100);
 	ball->setPosition(230, 123);
 }
+void GameScene::updateScore() {
+
+	numBlocks--;
+	scoreLabel->setString("# of blocks remaining: " + std::to_string(numBlocks));
+
+}
 bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 
 	PhysicsBody *a = contact.getShapeA()->getBody();
@@ -141,11 +151,12 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact) {
 	}
 	if (a->getCollisionBitmask() == 2 && b->getCollisionBitmask() == 3) {
 		removeChildByTag(b->getTag(), true);
-		//ballBody->applyImpulse(Vect(100, -600));
+		updateScore();
+		
 	}
 	if (a->getCollisionBitmask() == 3 && b->getCollisionBitmask() == 2) {
 		removeChildByTag(a->getTag(), true);
-		//ballBody->applyImpulse(Vect(100, -600));
+		updateScore();
 	}
 	
 	

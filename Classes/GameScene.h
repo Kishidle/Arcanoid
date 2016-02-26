@@ -26,13 +26,16 @@ private:
 	cocos2d::PhysicsBody* blockBody;
 	cocos2d::PhysicsBody* edgeBody;
 	cocos2d::Label* livesLabel;
+	cocos2d::Label* scoreLabel;
 	int lives;
+	int numBlocks;
 	bool gameStart;
 	static std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> keys;
 	
 	cocos2d::PhysicsWorld *gameWorld;
 	void SetPhysicsWorld(cocos2d::PhysicsWorld *world) { gameWorld = world; };
 	void resetState();
+	void updateScore();
 	bool onContactBegin(cocos2d::PhysicsContact &contact);
 
 public: 
