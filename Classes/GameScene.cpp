@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "SimpleAudioEngine.h"
+#include "EndScene.h"
 //make a datamanager class later
 USING_NS_CC;
 
@@ -19,7 +20,6 @@ Scene* GameScene::createScene() {
 }
 
 bool GameScene::init() {
-	//code here LOL
 
 	int i = 0;
 	int n = 0;
@@ -31,7 +31,7 @@ bool GameScene::init() {
 	curDir = 'x';
 	gameStart = false;
 
-	auto bgImage = Sprite::create("arcanoid.png");
+	auto bgImage = Sprite::create("arcanoidv2.png");
 	bgImage->setAnchorPoint(Vec2(0.0, 0.0));
 	
 	this->addChild(bgImage, 0);
@@ -202,6 +202,7 @@ void GameScene::update(float delta) {
 	else curDir = 'n';
 
 	if (curDir == 'a') {
+		
 		paddlePos.x = paddlePos.x - 150 * delta;
 		if(!gameStart) ballPos.x = ballPos.x - 150 * delta;
 	}
@@ -210,7 +211,7 @@ void GameScene::update(float delta) {
 		if(!gameStart) ballPos.x = ballPos.x + 150 * delta;
 		
 	}
-
+	if(!(paddlePos.x < 0 || paddlePos.x > 417))
 	paddle->setPosition(paddlePos);
 	
 	if (!gameStart) {
@@ -225,8 +226,8 @@ void GameScene::update(float delta) {
 			livesLabel->setString("Lives: " + std::to_string(lives));
 		}
 		else {
-			Scene* restartScene = GameScene::createScene();
-			Director::getInstance()->replaceScene(restartScene);
+			Scene* resetScene = GameScene::createScene();
+			Director::getInstance()->replaceScene(resetScene);
 		}
 	}
 	
