@@ -31,6 +31,11 @@ bool GameScene::init() {
 	curDir = 'x';
 	gameStart = false;
 
+	auto bgImage = Sprite::create("arcanoid.png");
+	bgImage->setAnchorPoint(Vec2(0.0, 0.0));
+	
+	this->addChild(bgImage, 0);
+	
 	livesLabel = Label::createWithSystemFont("Lives: " + std::to_string(lives), "Arial", 18);
 	livesLabel->setPosition(0, 0);
 	livesLabel->setAnchorPoint(Vec2(0, 0));
@@ -44,7 +49,7 @@ bool GameScene::init() {
 	paddle = Sprite::create("paddle.png");
 	paddle->setPosition(200, 100);
 	paddle->setAnchorPoint(Vec2(0, 0));
-	paddleBody = PhysicsBody::createBox(paddle->getContentSize(), PhysicsMaterial(0, 1, 0));
+	paddleBody = PhysicsBody::createBox(paddle->getContentSize(), PhysicsMaterial(0, 10, 0));
 	paddleBody->setCollisionBitmask(1);
 	paddleBody->setContactTestBitmask(true);
 	paddleBody->setDynamic(false);
@@ -93,7 +98,7 @@ bool GameScene::init() {
 			this->addChild(block);
 
 			tag++;
-			blockX += 39;
+			blockX += 42;
 		}
 		blockY -= 30;
 		blockX = 10;
